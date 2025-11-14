@@ -1,3 +1,6 @@
+app:
+  version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/master/version.txt"
+
 # 실행 모드: daily / current / incremental
 mode: current
 
