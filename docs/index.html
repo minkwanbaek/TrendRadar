@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TrendRadar 뉴스 대시보드</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>TrendRadar 뉴스 대시보드</h1>
+    <p>최신 뉴스는 30분마다 자동으로 업데이트됩니다.</p>
+
+    <div id="cards-container" class="cards"></div>
+
+    <script>
+        async function loadData() {
+            try {
+                const response = await fetch("../output/current.json");
+                const data = await response.json();
+                renderCards(data);
+            } catch (error) {
+                console.error("데이터 로드 실패:", error);
+            }
+        }
+
+        function renderCards(data) {
+            const container = document.getElementById("cards-container");
+            container.innerHTML = "";
+
+            data.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "card";
+
+                card.innerHTML = `
+                    <div class="keyword">${item.keyword}</div>
+                    <div class="title">${item.title}</div>
+                    <div class="source">${item.source}</div>
+                    <a href="${item.url}" target="_blank" class="link">기사 보기</a>
+                    <div class="time">${item.time}</div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        loadData();
+    </script>
+
+</body>
+</html>
