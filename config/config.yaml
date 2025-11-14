@@ -1,34 +1,88 @@
 app:
-  version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/master/version.txt"
-  show_version_update: false
+  # 버전 체크용 (건들 필요 없음)
+  version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
+  # 새 버전 안내 메시지 받을지 여부
+  show_version_update: true
 
-mode: current
+crawler:
+  # 요청 간격 (밀리초). 너무 작게 줄이면 뉴스 소스 서버에 부담.
+  request_interval: 1000
+  # 뉴스 크롤러 사용할지 여부
+  enable_crawler: true
+  # 프록시 안 쓸 거면 false 유지
+  use_proxy: false
+  default_proxy: "http://127.0.0.1:10086"
 
-save_result_to_repo: true
+# ---- 리포트/푸시 모드 설정 ----
+# daily        : 당일 전체 요약
+# current      : 지금 시점의 랭킹 기준
+# incremental  : 새로 나온 것만 푸시
+report:
+  mode: "current"          # 너는 실시간 성격이 맞을 듯해서 current 로 설정
+  rank_threshold: 5        # 상위 N위까지 강조 표시
 
-# 저장할 파일 경로
-history_result_path: "result/history.json"
-current_result_path: "result/current.json"
-output_path: "docs"
+notification:
+  enable_notification: false        # 일단 모바일 알림은 끄고 시작(나중에 Webhook 연결 후 true)
+  message_batch_size: 4000          # 이하 값들은 기본값 유지
+  dingtalk_batch_size: 20000
+  feishu_batch_size: 29000
+  batch_send_interval: 3
+  feishu_message_separator: "━━━━━━━━━━━━━━━━━━━"
 
-# 플랫폼 설정
-enable_platforms:
-  - yahoo
-  - cnn
-  - buzzsumo
-  - reddit
+# 푸시 시간대 제어 (GitHub Actions 배포에선 보통 사용 안 함)
+push_window:
+  enabled: false           # 시간창 기능 비활성화
+  time_range:
+    start: "20:00"
+    end: "22:00"
+  once_per_day: true
+  push_record_retention_days: 7
 
-keyword_check_mode: or
+# 절대 여기다가 Webhook 실제 값 넣지 말 것.
+# GitHub Secrets 에 넣어야 안전함.
+webhooks:
+  feishu_url: ""           # FEISHU_WEBHOOK 같은 건 GitHub Secrets 에
+  dingtalk_url: ""
+  wework_url: ""
+  telegram_bot_token: ""
+  telegram_chat_id: ""
+  email_from: ""
+  email_password: ""
+  email_to: ""
+  email_smtp_server: ""
+  email_smtp_port: ""
+  ntfy_server_url: "https://ntfy.sh"
+  ntfy_topic: ""
+  ntfy_token: ""
 
-keywords:
-  - 미국
-  - 테슬라
-  - 비트코인
-  - 엔비디아
-  - 개발자
-  - xbox
-  - 삼성
-  - 육아
+# 가중치 (그냥 기본값 쓰면 됨)
+weight:
+  rank_weight: 0.6
+  frequency_weight: 0.3
+  hotness_weight: 0.1
 
-enable_word_frequency_analysis: true
-frequency_words_path: "config/frequency_words.txt"
+# 모니터링할 플랫폼 목록 (우선 기본값 유지하고,
+# 나중에 잘 돌아가면 이 부분을 커스터마이징 하자)
+platforms:
+  - id: "toutiao"
+    name: "今日头条"
+  - id: "baidu"
+    name: "百度热搜"
+  - id: "wallstreetcn-hot"
+    name: "华尔街见闻"
+  - id: "thepaper"
+    name: "澎湃新闻"
+  - id: "bilibili-hot-search"
+    name: "bilibili 热搜"
+  - id: "cls-hot"
+    name: "财联社热门"
+  - id: "ifeng"
+    name: "凤凰网"
+  - id: "tieba"
+    name: "贴吧"
+  - id: "weibo"
+    name: "微博"
+  - id: "douyin"
+    name: "抖音"
+  - id: "zhihu"
+    name: "知乎"
