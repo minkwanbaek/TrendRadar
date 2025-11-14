@@ -1,59 +1,34 @@
 app:
   version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/master/version.txt"
+  show_version_update: false
 
-# 실행 모드: daily / current / incremental
 mode: current
 
-# 저장 방식
 save_result_to_repo: true
 
-# 분석 기본 설정
-max_hot_count: 50           # 플랫폼별 수집할 최대 트렌드 수
-min_text_length: 20         # 너무 짧은 내용 제외
-summary: true               # 요약 생성 활성화
-sentiment: true             # 감성 분석 활성화
-extract_keywords: true      # 키워드 추출 활성화
+# 저장할 파일 경로
+history_result_path: "result/history.json"
+current_result_path: "result/current.json"
+output_path: "docs"
 
-# 트렌드 검색 키워드 파일 경로
-frequency_words_path: "config/frequency_words.txt"
-
-# 활성화 플랫폼 목록 (당신 키워드 기반 최적 조합)
+# 플랫폼 설정
 enable_platforms:
-  - zhihu        # 미국·엔비디아·삼성·기술 토론 강함
-  - weibo        # 미국 기업·비트코인·테슬라·xbox 매우 빠름
-  - bilibili     # 기술·리뷰·게임 관련 신호 강함
-  - toutiao      # 글로벌 뉴스 + 육아 주제 풍부
-  - wallstreetcn # 증시·미국 시장·비트코인 속보
-  - finace       # 금융·암호화폐 대량 뉴스
-  - douyin       # 육아·일상 트렌드
-  - xueqiu       # 주식·엔비디아·테슬라 트렌드 강함
-  - ithome       # 개발자·IT·반도체 강함
-  - huxiu        # 비즈니스·기술 트렌드 기사
+  - yahoo
+  - cnn
+  - buzzsumo
+  - reddit
 
-# GitHub Pages / Repo 저장 설정
-output:
-  path: "docs"               # GitHub Pages 자동 배포용
-  generate_html: true
-  generate_json: true
+keyword_check_mode: or
 
-# GitHub Actions 실행 관련
-schedule:
-  cron: "0 */6 * * *"        # 6시간마다 자동 실행
+keywords:
+  - 미국
+  - 테슬라
+  - 비트코인
+  - 엔비디아
+  - 개발자
+  - xbox
+  - 삼성
+  - 육아
 
-# 알림 (원할 경우 활성화)
-notification:
-  enable: false              # 기본은 비활성 (원하면 true로 변경)
-  channels:
-    telegram:
-      enable: false
-      bot_token: "${{ secrets.TELEGRAM_BOT_API_KEY }}"
-      chat_id: "${{ secrets.TELEGRAM_CHAT_ID }}"
-    dingding:
-      enable: false
-      webhook: "${{ secrets.DINGTALK_WEBHOOK }}"
-    feishu:
-      enable: false
-      webhook: "${{ secrets.FEISHU_WEBHOOK }}"
-    ntfy:
-      enable: false
-      url: "${{ secrets.NTFY_URL }}"
+enable_word_frequency_analysis: true
+frequency_words_path: "config/frequency_words.txt"
