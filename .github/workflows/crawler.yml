@@ -2,18 +2,18 @@ name: Hot News Crawler
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # 30분마다 실행
-  workflow_dispatch:         # 수동 실행도 가능
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
 
 jobs:
   crawl:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
@@ -23,13 +23,17 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run crawler
-        run: |
-          python main.py
+        run: python main.py
 
-      - name: Update Pages (docs/index.html uses current.json)
+      - name: Copy to docs/data.json
+        run: |
+          mkdir -p docs
+          cp output/current.json docs/data.json
+
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add .
-          git commit -m "Update data" || echo "No changes to commit"
+          git add docs/data.json
+          git commit -m "Update data" || echo "No changes"
           git push
