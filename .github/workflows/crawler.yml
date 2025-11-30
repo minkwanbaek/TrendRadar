@@ -1,9 +1,9 @@
 name: Hot News Crawler
 
-on:
-  schedule:
-    - cron: "*/30 * * * *"
-  workflow_dispatch:
+#on:
+#  schedule:
+#    - cron: "*/30 * * * *"
+#  workflow_dispatch:
 
 jobs:
   crawl:
